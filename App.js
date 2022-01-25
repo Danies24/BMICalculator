@@ -47,14 +47,17 @@ export default function App() {
 
       <Text style={style.logo}>BMI CALCULATOR</Text>
       <View>
-      <TextInput style={style.textInput} placeholderTextColor='#1A1A40' placeholder='Weight (kg)' keyboardType='numeric' keyboardAppearance='dark' onChangeText={(value)=>setWeight(value)}/>
-      <TextInput style={style.textInput}  placeholderTextColor='#1A1A40' placeholder='Height (cm)' keyboardType='numeric'  onChangeText={(value)=>setHeight(value)}/>
+      <TextInput style={style.textInput} placeholderTextColor='#1A1A40' placeholder='Weight (kg)' keyboardType='numeric' value={Weight} keyboardAppearance='dark' onChangeText={(value)=>setWeight(value)}/>
+      <TextInput style={style.textInput}  placeholderTextColor='#1A1A40' placeholder='Height (cm)' keyboardType='numeric' value={Height} onChangeText={(value)=>setHeight(value)}/>
       </View>
 
       <View style={style.buttonBox}>
 
       <TouchableOpacity style={style.button} onPress={()=>calculateBmiFunction()}>
         <Text style={style.buttonText}>C A L C U L A T E</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={[style.button,style.resetButton]} onPress={()=>ResetFunction()}>
+        <Text style={style.buttonText}>Reset</Text>
       </TouchableOpacity>
       </View>
       <Text style={[style.message,style.bmiNumber]}> Your BMI : {bmi} kg/m</Text>
@@ -81,7 +84,7 @@ export default function App() {
     padding:10,
     paddingVertical:20,
     width:'85%',
-    height:'65%',
+    height:'75%',
   },
   logo:{
     color:'#1A1A40',
@@ -109,7 +112,11 @@ buttonText:{
   color:'white',
   textAlign:'center',
   fontWeight:'600',
-  fontSize:17
+  fontSize:15
+},
+resetButton:{
+  backgroundColor:'red',
+  // padding:0
 },
 bmiNumber:{
   fontSize:20,

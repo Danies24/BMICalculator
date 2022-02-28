@@ -7,25 +7,30 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 
 export default function App() {
-  const {control} = useForm();
-  const [Height, setHeight] = useState('');
-  const [Weight, setWeight] = useState('');
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: {errors},
+  } = useForm();
+
   const [bmi, setBMI] = useState('');
   const [message, setMessage] = useState('');
 
-  const calculateBmiFunction = () => {
+  const calculateBmiFunction = data => {
+    const {Height, Weight} = data;
+
     if (Weight == 0 || Height == 0) {
-      Alert.alert('No Value Found', 'Enter Proper Weight and Height', [
+      Alert.alert('Wrong Value', 'Enter Proper Weight and Height', [
         {text: 'OK'},
       ]);
     } else {
       let bmi = (Weight / (Height * Height)) * 10000;
       setBMI(bmi.toFixed(1));
-
       if (bmi < 18.5) {
         setMessage('You are underweight');
       } else if (bmi > 18.5 && bmi < 24.9) {
@@ -37,47 +42,58 @@ export default function App() {
       }
     }
   };
-  const ResetFunction = () => {
-    setHeight('');
-    setWeight('');
-    setBMI('');
-    setMessage('');
-  };
+
   return (
     <View style={style.container}>
       <View style={style.middleBox}>
         <Text style={style.logo}>BMI CALCULATOR</Text>
         <View>
-          <TextInput
-            style={style.textInput}
-            placeholderTextColor="#1A1A40"
-            placeholder="Weight (kg)"
-            keyboardType="numeric"
-            value={Weight}
-            keyboardAppearance="dark"
-            onChangeText={value => setWeight(value)}
+          <Controller
+            control={control}
+            render={({field: {onChange, onBlur, value, ref}}) => (
+              <TextInput
+                style={style.textInput}
+                placeholderTextColor="#1A1A40"
+                placeholder="Weight (kg)"
+                keyboardType="numeric"
+                value={value}
+                keyboardAppearance="dark"
+                onChangeText={value => onChange(value)}
+              />
+            )}
+            name="Weight"
+            rules={{
+              required: true,
+            }}
           />
-          <TextInput
-            style={style.textInput}
-            placeholderTextColor="#1A1A40"
-            placeholder="Height (cm)"
-            keyboardType="numeric"
-            value={Height}
-            onChangeText={value => setHeight(value)}
+          {errors.Weight && <Text>Field required</Text>}
+          <Controller
+            control={control}
+            name="Height"
+            rules={{
+              required: true,
+            }}
+            render={({field: {onChange, onBlur, value, ref}}) => (
+              <TextInput
+                style={style.textInput}
+                placeholderTextColor="#1A1A40"
+                placeholder="Height (kg)"
+                keyboardType="numeric"
+                value={value}
+                keyboardAppearance="dark"
+                onChangeText={value => onChange(value)}
+              />
+            )}
           />
+          {errors.Height && <Text>Field required</Text>}
         </View>
 
         <View style={style.buttonBox}>
-          <TouchableOpacity
-            style={style.button}
-            onPress={() => calculateBmiFunction()}>
-            <Text style={style.buttonText}>C A L C U L A T E</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[style.button, style.resetButton]}
-            onPress={() => ResetFunction()}>
-            <Text style={style.buttonText}>Reset</Text>
-          </TouchableOpacity>
+          <Button
+            title="Calculate"
+            onPress={handleSubmit(calculateBmiFunction)}
+          />
+          <Button title="Reset" onPress={() => reset()} />
         </View>
         <Text style={[style.message, style.bmiNumber]}>
           {' '}

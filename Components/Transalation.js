@@ -15,7 +15,6 @@ export default function Transalation() {
       </Text>
       <Button onPress={() => i18n.changeLanguage('en')} title="E N G L I S H" />
       <Button onPress={() => i18n.changeLanguage('ta')} title="T A M I L" />
-
       <Button onPress={() => i18n.changeLanguage('hi')} title="H I N D I" />
     </View>
   );

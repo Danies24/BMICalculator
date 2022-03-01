@@ -10,8 +10,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "i18next": "^21.6.12",
     "react": "17.0.2",
+    "react-i18next": "^11.15.5",
     "react-native": "0.67.1",
+    "react-native-localize": "^2.2.0",
     "react-native-restart": "^0.0.23"
   },
   "devDependencies": {
